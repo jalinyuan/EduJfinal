@@ -1,0 +1,134 @@
+<form id="splitPage" class="form-horizontal" action="${cxt!}/jf/platform/course" method="POST">
+	
+	<div>
+		<ul class="breadcrumb">
+			<li>
+				<a href="#" onclick="ajaxContent('/jf/platform/index/content');">${i18nMap["admin.common.mainPage"]}</a> <span class="divider">/</span>
+			</li>
+			<li>
+				<a href="#">${i18nMap["admin.course.common.name"]}</a>
+			</li>
+		</ul>
+	</div>
+	
+	<div class="row-fluid sortable">
+		<div class="box span12">
+			<div class="box-header well" data-original-title>
+				<h2><i class="icon-edit"></i> ${i18nMap["admin.course.list.select"]}</h2>
+				<div class="box-icon">
+						 	<% if(hasPrivilegeUrl("/platform/webview/course/add.html")){ %>
+					 <a href="#" class="btn btn-round " title='${i18nMap["admin.course.add"]}' onclick="ajaxContent('/jf/platform/webview/course/toUrl?toUrl=/platform/webview/course/add.html');" ><i class="icon-plus-sign"></i></a>
+					<% } %> 
+			    
+					<a href="#" class="btn btn-minimize btn-round"><i class="icon-chevron-down"></i></a>
+					<a href="#" class="btn btn-close btn-round"><i class="icon-remove"></i></a>
+				</div>
+			</div>
+			<div class="box-content">
+				<fieldset>
+				  	<div class="control-group">
+						 <label class="control-label" for="focusedInput">${i18nMap["admin.course.property.courseName"]} 
+			
+						</label>
+						<div class="controls">
+					  		<input class="input-xlarge focused" type="text" name="_query.courseName" value='${escapeXml(paramMap["_query.courseName"])}' maxlength="20" >
+						</div>
+				  	</div>
+				  
+				  	<div class="control-group">
+						 <label class="control-label">${i18nMap["admin.course.property.classify"]}</label> 
+					
+						<div class="controls">
+					  		<input class="input-xlarge" type="text" name="_query.classify" value='${escapeXml(paramMap["_query.classify"])}' maxlength="40" >
+						</div>
+				  	</div>
+					
+				  	<div class="control-group">
+						 <label class="control-label">${i18nMap["admin.course.property.difficulty"]}</label> 
+					
+						<div class="controls">
+					  		<input class="input-xlarge " type="text" name="_query.difficulty" value='${escapeXml(paramMap["_query.difficulty"])}'  >
+						</div>
+				  	</div>
+					
+				  	<div class="form-actions">
+						<button type="button" class="btn btn-primary" onclick='ajaxForm("content", "splitPage");'>${i18nMap["admin.common.select"]}</button>
+						<button type="reset" class="btn">${i18nMap["admin.common.reset"]}</button>
+				  	</div>
+				</fieldset>
+			</div>
+		</div><!--/span-->
+	</div><!--/row-->
+	
+	<div class="row-fluid sortable">
+		<div class="box span12">
+			
+			<div class="box-header well" data-original-title>
+				 <h2><i class="icon-user"></i> ${i18nMap["admin.course.list.table"]}</h2> 
+				
+				<div class="box-icon">
+					<a href="#" class="btn btn-minimize btn-round"><i class="icon-chevron-up"></i></a> 
+					<a href="#" class="btn btn-close btn-round"><i class="icon-remove"></i></a>
+				</div>
+			</div>
+			
+			<div class="box-content">
+				<table class="table table-striped table-bordered bootstrap-datatable ">
+					<thead>
+						<tr>
+							<th onclick="orderbyFun('content', 'splitPage', 'courseName')">
+								${i18nMap["admin.course.property.courseName"]}	${orderBy("courseName")}
+	      					</th>
+							<th onclick="orderbyFun('content', 'splitPage', 'difficulty')">
+								${i18nMap["admin.course.property.difficulty"]}	${orderBy("difficulty")}
+	      					</th>
+							<th onclick="orderbyFun('content', 'splitPage', 'classify')">
+								${i18nMap["admin.course.property.classify"]}	${orderBy("classify")}
+							</th>
+							
+							<th width="280">${i18nMap["admin.common.operation"]}</th>
+						</tr>
+					</thead>
+					<tbody>
+						<%
+							var view = hasPrivilegeUrl("/jf/platform/webview/course/view");
+							var edit = hasPrivilegeUrl("/jf/platform/webview/course/edit");
+							var delete = hasPrivilegeUrl("/jf/platform/webview/course/delete");
+							var group = hasPrivilegeUrl("/jf/platform/webview/group/select");
+						%>
+						<% for(course in splitPage.list){ %>
+							<tr>
+								<td>${escapeXml(course.courseName!) }</td>
+								<td>${escapeXml(course["difficulty"]!) }</td>
+								<td class="center">${escapeXml(course["classify"]!) }</td>
+						
+								<td class="center">
+									<% if(view == true){ %>
+										<a class="btn btn-success" href="#" onclick="ajaxContent('/jf/platform/webview/course/view/${escapeXml(course.ids!)}');"> <i class="icon-zoom-in icon-white"></i> ${i18nMap["admin.common.see"]}</a>
+									<% } %>
+									<% if(edit == true){ %>
+										<a class="btn btn-info" href="#" onclick="ajaxContent('/jf/platform/webview/course/edit/${escapeXml(course.ids!)}');"> <i class="icon-edit icon-white"></i> ${i18nMap["admin.common.edit"]}</a>
+									<% } %>
+									<% if(delete == true){ %>
+										<a class="btn btn-danger" href="#" onclick="ajaxContentConfirm('/jf/platform/webview/course/delete/${escapeXml(course.ids!)}');"> <i class="icon-trash icon-white"></i> ${i18nMap["admin.common.delete"]}</a>
+									<% } %>
+									<% if(group == true){ %>
+										<a class="btn btn-danger" href="#" onclick="groupSelectDialog('${escapeXml(course.ids!)}');"> <i class="icon-trash icon-white"></i> ${i18nMap["admin.course.list.table.group"]}</a>
+									<% } %>
+								</td>
+							</tr>
+						<% } %>
+					</tbody>
+				</table>
+				<div id="splitPageDiv" class="pagination pagination-centered">
+					<% include("/common/splitPage.html", {"divId" : "content", "formId" : "splitPage", "splitPageDiv" : "splitPageDiv"}){} %>
+				</div>
+			</div>
+			
+		</div>
+		<!--/span-->
+	
+	</div>
+	<!--/row-->
+
+</form>

@@ -1,0 +1,51 @@
+
+
+<script type="text/javascript">
+
+function dataVali(form){
+	var errorCount = formVali(form);
+	if(errorCount != 0){
+		simpleDialog('��֤��ʾ', '��'+errorCount+'������������');
+ 		return false;
+	}
+	
+	ajaxForm("content", "editForm");
+}
+
+</script>
+
+<fieldset>
+
+	<div class="control-group">
+		<label class="control-label">${i18nMap["admin.course.property.coursename"]}</label>
+		<div class="controls">
+			<input type="text" name="course.coursename" value="${escapeXml(course.coursename!)}" 
+				class="input-xlarge" maxlength="25" vMin="2" vType="length" onblur="onblurVali(this);">
+			
+		</div>
+	</div>
+	<div class="control-group">
+		<label class="control-label">${i18nMap["admin.course.property.difficulty"]}</label>
+		<div class="controls">
+			<select name="course.difficulty" class="combox">
+				<option value="0" >0</option>
+				<option value="1" >1</option>
+				<option value="2" >2</option>
+			</select>
+			<span class="help-inline"></span>
+		</div>
+	</div>
+
+	<div class="control-group">
+		<label class="control-label">${i18nMap["admin.course.property.classify"]}</label>
+		<div class="controls">
+			<select name="course.classify" class="combox">
+				<option value="0" >JAVA</option>
+				<option value="1" >C++</option>
+				<option value="2" >Node.js</option>
+			</select>
+			<span class="help-inline"></span>
+		</div>
+	</div>
+
+</fieldset>
